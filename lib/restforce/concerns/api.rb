@@ -209,8 +209,11 @@ module Restforce
       #
       # Returns a Restforce::Collection if Restforce.configuration.mashify is true.
       # Returns an Array of Hash for each record in the result if Restforce.configuration.mashify is false.
-      def query_next_page(url)
-        response = get url
+      def query_next_page(url, options = {})
+        batch_size = options[:batch_size]
+        response = get url do |req|
+          req.headers['Sforce-Query-Options'] = "batchSize=#{batch_size}" if batch_size != nil
+        end
         mashify? ? response.body : response.body['records']
       end
 
