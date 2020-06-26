@@ -114,10 +114,10 @@ describe Restforce::Middleware::Authentication do
         end
 
         its(:handlers) {
-          should include FaradayMiddleware::ParseJson,
-                         Faraday::Adapter::NetHttp
+          should include FaradayMiddleware::ParseJson
         }
         its(:handlers) { should_not include Restforce::Middleware::Logger }
+        its(:adapter) { should eq Faraday::Adapter::NetHttp }
       end
 
       context 'with logging enabled' do
@@ -127,8 +127,9 @@ describe Restforce::Middleware::Authentication do
 
         its(:handlers) {
           should include FaradayMiddleware::ParseJson,
-                         Restforce::Middleware::Logger, Faraday::Adapter::NetHttp
+                         Restforce::Middleware::Logger
         }
+        its(:adapter) { should eq Faraday::Adapter::NetHttp }
       end
 
       context 'with specified adapter' do
@@ -137,8 +138,9 @@ describe Restforce::Middleware::Authentication do
         end
 
         its(:handlers) {
-          should include FaradayMiddleware::ParseJson, Faraday::Adapter::Typhoeus
+          should include FaradayMiddleware::ParseJson
         }
+        its(:adapter) { should eq Faraday::Adapter::Typhoeus }
       end
     end
 
@@ -151,7 +153,7 @@ describe Restforce::Middleware::Authentication do
     context 'when response.body is present' do
       let(:response) {
         Faraday::Response.new(
-          body: { 'error' => 'error', 'error_description' => 'description' },
+          response_body: { 'error' => 'error', 'error_description' => 'description' },
           status: 401
         )
       }

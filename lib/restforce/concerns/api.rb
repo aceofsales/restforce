@@ -544,7 +544,7 @@ module Restforce
 
       # Internal: Errors that should be rescued from in non-bang methods
       def exceptions
-        [Faraday::ClientError]
+        [Faraday::Error]
       end
     end
   end
